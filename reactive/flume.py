@@ -25,40 +25,37 @@ def install_flume(*args):
 
 
 @when('flume.installed')
-@when_not('flume-agent.connected')
+@when_not('flumehdfs.connected')
 def waiting_for_flume_connection():
     hookenv.status_set('blocked', 'Waiting for connection to Flume HDFS')
 
 
-@when('flume.installed', 'flume-agent.connected')
-@when_not('flume-agent.available')
-def waiting_for_flume_available(flume):
+@when('flume.installed', 'flumehdfs.connected')
+@when_not('flumehdfs.available')
+def waiting_for_flume_available(flumehdfs):
     hookenv.status_set('waiting', 'Waiting for availability of Flume HDFS')
 
 
-@when('flume.installed', 'flume-agent.available')
+@when('flume.installed', 'flumehdfs.available')
 @when_not('flume.started')
 def configure_flume(flumehdfs):
-    try:
-        port = flumehdfs.get_flume_port()
-        ip = flumehdfs.get_flume_ip()
-        protocol = flumehdfs.get_flume_protocol()
-        flumehdfsinfo = {'port': port, 'private-address': ip, 'protocol': protocol}
-        hookenv.log("Connecting to Flume HDFS")
-        hookenv.status_set('maintenance', 'Setting up Flume')
-        flume = Flume(dist_config())
-        flume.configure_flume(flumehdfsinfo)
-        config = hookenv.config()
-        data_changed('configuration', config)
-        flume.restart()
-        hookenv.status_set('active', 'Ready')
-        set_state('flume.started')
-    except:
-        hookenv.log("Relation with Flume sink not established correctly")        
+    port = flumehdfs.get_flume_port()
+    ip = flumehdfs.get_flume_ip()
+    protocol = flumehdfs.get_flume_protocol()
+    flumehdfsinfo = {'port': port, 'private-address': ip, 'protocol': protocol}
+    hookenv.log("Connecting to Flume HDFS")
+    hookenv.status_set('maintenance', 'Setting up Flume')
+    flume = Flume(dist_config())
+    flume.configure_flume(flumehdfsinfo)
+    config = hookenv.config()
+    data_changed('configuration', config)
+    flume.restart()
+    hookenv.status_set('active', 'Ready')
+    set_state('flume.started')
 
 
 @when('flume.started')
-@when_not('flume-agent.available')
+@when_not('flumehdfs.available')
 def agent_disconnected():
     remove_state('flume.started')
     hookenv.status_set('blocked', 'Waiting for a connection to Flume HDFS')
@@ -66,7 +63,7 @@ def agent_disconnected():
     flume.stop()
 
 
-@when('flume.started', 'flume-agent.available')
+@when('flume.started', 'flumehdfs.available')
 def reconfigure(flumehdfs):
     config = hookenv.config()
     if not data_changed('configuration', config):

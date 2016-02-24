@@ -9,7 +9,8 @@ from charmhelpers.contrib import bigdata
 
 class TestDistConfig(unittest.TestCase):
     """
-    Test that the ``dist.yaml`` settings were applied properly, such as users, groups, and dirs.
+    Test that the ``dist.yaml`` settings were applied properly, such as users,
+    groups, and dirs.
 
     This is done as a remote test on the deployed unit rather than a regular
     test under ``tests/`` because filling in the ``dist.yaml`` requires Juju
@@ -36,11 +37,12 @@ class TestDistConfig(unittest.TestCase):
                 try:
                     group = grp.getgrnam(groupname)
                 except KeyError:
-                    self.fail('Group {} referenced by user {} does not exist'.format(
-                        groupname, username))
+                    self.fail('Group {} referenced by user {} does not exist'
+                              .format(groupname, username))
                 if group.gr_gid != user.pw_gid:
-                    self.assertIn(username, group.gr_mem, 'User {} not in group {}'.format(
-                        username, groupname))
+                    self.assertIn(username, group.gr_mem,
+                                  'User {} not in group {}'
+                                  .format(username, groupname))
 
     def test_dirs(self):
         for name, details in self.hadoop.managed_dirs.items():
@@ -51,11 +53,14 @@ class TestDistConfig(unittest.TestCase):
             group = grp.getgrgid(stat.st_gid).gr_name
             perms = stat.st_mode & ~0o40000
             self.assertEqual(owner, details.get('owner', 'root'),
-                             'Dir {} ({}) has wrong owner: {}'.format(name, dirpath, owner))
+                             'Dir {} ({}) has wrong owner: {}'
+                             .format(name, dirpath, owner))
             self.assertEqual(group, details.get('group', 'root'),
-                             'Dir {} ({}) has wrong group: {}'.format(name, dirpath, group))
+                             'Dir {} ({}) has wrong group: {}'
+                             .format(name, dirpath, group))
             self.assertEqual(perms, details.get('perms', 0o744),
-                             'Dir {} ({}) has wrong perms: 0o{:o}'.format(name, dirpath, perms))
+                             'Dir {} ({}) has wrong perms: 0o{:o}'
+                             .format(name, dirpath, perms))
 
 
 if __name__ == '__main__':

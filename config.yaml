@@ -14,9 +14,3 @@ options:
       default: ''
       description: |
         The Kafka topic to watch for messages
-    zookeeper_connect:
-      type: string
-      default: ''
-      description: |
-        Zookeeper ip:port,ip:port,etc string. Obtain with 'juju action do
-        kafka/0 list-zks'. Future revisions will detect this automatically.

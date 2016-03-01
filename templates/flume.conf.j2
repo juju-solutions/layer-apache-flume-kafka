@@ -9,7 +9,7 @@ a1.sinks = {{ agents|agent_list(prefix='sink-') }}
 a1.sources.r1.type = org.apache.flume.source.kafka.KafkaSource
 a1.sources.r1.batchSize = {{ config['kafka_max_batch_size'] }}
 a1.sources.r1.topic = {{ config['kafka_topic'] }}
-a1.sources.r1.zookeeperConnect = {{ zookeepers|map('join', ':')|join(',') }}
+a1.sources.r1.zookeeperConnect = {{ zookeepers|map('map_format', '%(host)s:%(port)s')|join(',') }}
 
 # inject our configured subdir
 a1.sources.r1.interceptors = i1

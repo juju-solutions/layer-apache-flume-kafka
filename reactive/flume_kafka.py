@@ -1,9 +1,8 @@
 from charms.reactive import when, when_not
 from charms.reactive import set_state, remove_state, is_state
 from charmhelpers.core import hookenv
-from charms.flume import Flume
+from charms.layer.apache_flume_base import Flume
 from charms.reactive.helpers import any_file_changed
-from jujubigdata.utils import DistConfig
 
 
 @when('flume-base.installed')
@@ -31,12 +30,12 @@ def report_status():
 @when('flume-sink.ready', 'kafka.available')
 def configure_flume(sink, kafka):
     hookenv.status_set('maintenance', 'Configuring Flume')
-    flume = Flume(DistConfig())
+    flume = Flume()
     flume.configure_flume({
         'agents': sink.agents(),
         'zookeepers': kafka.zookeepers(),
     })
-    if any_file_changed(flume.config_file):
+    if any_file_changed([flume.config_file]):
         flume.restart()
     hookenv.status_set('active', 'Ready')
     set_state('flume-kafka.started')
@@ -45,7 +44,7 @@ def configure_flume(sink, kafka):
 @when('flume-kafka.started')
 @when_not('flume-sink.ready')
 def stop_flume():
-    flume = Flume(DistConfig())
+    flume = Flume()
     flume.stop()
     remove_state('flume-kafka.started')
 

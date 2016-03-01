@@ -1,0 +1,3 @@
+dirs:
+  zookeeper:
+    path: '/usr/lib/zookeeper'

@@ -35,6 +35,7 @@ def configure_flume(sink, kafka):
         'agents': sink.agents(),
         'zookeepers': kafka.zookeepers(),
     })
+    flume.configure_zookeeper()
     if any_file_changed([flume.config_file]):
         flume.restart()
     hookenv.status_set('active', 'Ready')

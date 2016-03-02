@@ -64,18 +64,6 @@ creation) with:
      partitions=1 replication=1
     juju action fetch <id>  # <-- id from above command
 
-You'll also need to specify the Zookeeper connection string for this charm. In
-the future, this value will be automatically available via the Kafka relation.
-Retrieve the current Zookeeper connection string with:
-
-    juju action do kafka/0 list-zks
-    juju action fetch <id>  # <-- id from above command
-
-Set the <ip>:<port> information from the above `zookeepers` output in this
-charm:
-
-    juju set flume-kafka zookeeper_connect='<ip:port>'
-
 Once the Flume agents start, messages will start flowing into
 HDFS in year-month-day directories here: `/user/flume/flume-kafka/%y-%m-%d`.
 

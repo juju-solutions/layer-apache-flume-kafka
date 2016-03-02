@@ -1,15 +1,15 @@
 # list sources, sinks, and channels in the agent
 a1.sources = r1
-a1.sinks = k1
-a1.channels = c1
+a1.sources.r1.channels = {{ agents|agent_list(prefix='chan-') }}
+a1.channels = {{ agents|agent_list(prefix='chan-') }}
+a1.sinks = {{ agents|agent_list(prefix='sink-') }}
 
 
 # source properties
 a1.sources.r1.type = org.apache.flume.source.kafka.KafkaSource
-a1.sources.r1.channels = c1
 a1.sources.r1.batchSize = {{ config['kafka_max_batch_size'] }}
 a1.sources.r1.topic = {{ config['kafka_topic'] }}
-a1.sources.r1.zookeeperConnect = {{ config['zookeeper_connect'] }}
+a1.sources.r1.zookeeperConnect = {{ zookeepers|map('map_format', '%(host)s:%(port)s')|join(',') }}
 
 # inject our configured subdir
 a1.sources.r1.interceptors = i1
@@ -17,13 +17,15 @@ a1.sources.r1.interceptors.i1.type = static
 a1.sources.r1.interceptors.i1.key = event_dir
 a1.sources.r1.interceptors.i1.value = {{ config['event_dir'] }}
 
+{% for agent in agents %}
 # channel properties
-a1.channels.c1.type = memory
-a1.channels.c1.capacity = {{ config['channel_capacity']}}
-a1.channels.c1.transactionCapacity = {{ config['channel_transaction_capacity']}}
+a1.channels.chan-{{ agent['name'] }}.type = memory
+a1.channels.chan-{{ agent['name'] }}.capacity = {{ config['channel_capacity']}}
+a1.channels.chan-{{ agent['name'] }}.transactionCapacity = {{ config['channel_transaction_capacity']}}
 
 # sink properties
-a1.sinks.k1.type = {{ flume_hdfs['protocol'] }}
-a1.sinks.k1.channel = c1
-a1.sinks.k1.hostname = {{ flume_hdfs['private-address'] }}
-a1.sinks.k1.port = {{ flume_hdfs['port'] }}
+a1.sinks.sink-{{ agent['name'] }}.type = {{ agent['protocol'] }}
+a1.sinks.sink-{{ agent['name'] }}.channel = chan-{{ agent['name'] }}
+a1.sinks.sink-{{ agent['name'] }}.hostname = {{ agent['host'] }}
+a1.sinks.sink-{{ agent['name'] }}.port = {{ agent['port'] }}
+{% endfor %}

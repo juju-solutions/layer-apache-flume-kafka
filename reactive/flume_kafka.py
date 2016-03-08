@@ -8,8 +8,8 @@ from charms.reactive.helpers import any_file_changed
 @when('flume-base.installed')
 @when_not('flume-kafka.started')
 def report_status():
-    kafka_joined = is_state('kafka.connected')
-    kafka_ready = is_state('kafka.available')
+    kafka_joined = is_state('kafka.joined')
+    kafka_ready = is_state('kafka.ready')
     sink_joined = is_state('flume-sink.ready')
     sink_ready = is_state('flume-sink.joined')
     if not kafka_joined and not sink_joined:
@@ -27,7 +27,7 @@ def report_status():
 
 
 @when('flume-base.installed')
-@when('flume-sink.ready', 'kafka.available')
+@when('flume-sink.ready', 'kafka.ready')
 def configure_flume(sink, kafka):
     hookenv.status_set('maintenance', 'Configuring Flume')
     flume = Flume()
@@ -51,6 +51,6 @@ def stop_flume():
 
 
 @when('flume-kafka.started')
-@when_not('kafka.available')
+@when_not('kafka.ready')
 def kafka_lost():
     stop_flume()

@@ -16,38 +16,13 @@ KafkaSource jar packaged with Flume. Learn more about the
 
 ## Usage
 
-This charm leverages our pluggable Hadoop model with the `hadoop-plugin`
-interface. This means that you will need to deploy a base Apache Hadoop cluster
-extended with Flume and Kafka. The suggested deployment method is to use the
-[apache-ingestion-flume-kafka](https://jujucharms.com/u/bigdata-dev/apache-ingestion-flume-kafka/)
-bundle. This will deploy the Apache Hadoop platform with Apache Flume
-and Apache Kafka communicating with the cluster by relating to the
-`apache-hadoop-plugin` subordinate charm:
+This charm is intended to be deployed via the
+[apache-ingestion-kafka](https://jujucharms.com/apache-ingestion-kafka) bundle:
 
-    juju quickstart u/bigdata-dev/apache-ingestion-flume-kafka
+    juju quickstart apache-ingestion-kafka
 
-Alternatively, you may manually deploy the recommended environment as follows:
-
-    juju deploy apache-hadoop-namenode namenode
-    juju deploy apache-hadoop-resourcemanager resourcemgr
-    juju deploy apache-hadoop-slave slave
-    juju deploy apache-hadoop-plugin plugin
-
-    juju add-relation namenode slave
-    juju add-relation resourcemgr slave
-    juju add-relation resourcemgr namenode
-    juju add-relation plugin resourcemgr
-    juju add-relation plugin namenode
-
-    juju deploy apache-flume-hdfs flume-hdfs
-    juju deploy apache-flume-kafka flume-kafka
-    juju deploy apache-kafka kafka
-    juju deploy apache-zookeeper zookeeper
-
-    juju add-relation flume-hdfs plugin
-    juju add-relation flume-kafka flume-hdfs
-    juju add-relation flume-kafka kafka
-    juju add-relation kafka zookeeper
+This will deploy the Apache Hadoop platform with Apache Flume and Apache Kafka
+communicating with the cluster via the `apache-hadoop-plugin` charm.
 
 
 ## Configure the environment

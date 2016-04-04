@@ -25,7 +25,7 @@ This will deploy the Apache Hadoop platform with Apache Flume and Apache Kafka
 communicating with the cluster via the `apache-hadoop-plugin` charm.
 
 
-## Configure the environment
+## Configuration
 
 The default Kafka topic where messages are published is unset. Set this to
 an existing Kafka topic as follows:
@@ -45,7 +45,9 @@ HDFS in year-month-day directories here: `/user/flume/flume-kafka/%y-%m-%d`.
 
 ## Test the deployment
 
-Generate Kafka messages on the `kafka` unit with the producer script:
+A Kafka topic is required for this test. Topic creation is covered in the
+**Configuration** section above. Generate Kafka messages on the `kafka` unit
+with the producer script:
 
     juju ssh kafka/0
     kafka-console-producer.sh --broker-list localhost:9092 --topic <topic_name>

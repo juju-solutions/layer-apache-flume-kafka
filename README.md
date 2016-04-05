@@ -43,15 +43,13 @@ Once the Flume agents start, messages will start flowing into
 HDFS in year-month-day directories here: `/user/flume/flume-kafka/%y-%m-%d`.
 
 
-## Test the deployment
+## Testing
 
 A Kafka topic is required for this test. Topic creation is covered in the
-**Configuration** section above. Generate Kafka messages on the `kafka` unit
-with the producer script:
+**Configuration** section above. Generate Kafka messages with the `write-topic`
+action:
 
-    juju ssh kafka/0
-    kafka-console-producer.sh --broker-list localhost:9092 --topic <topic_name>
-    <type message, press Enter>
+    juju action do kafka/0 write-topic topic=<topic_name> data="This is a test"
 
 To verify these messages are being stored into HDFS, SSH to the `flume-hdfs`
 unit, locate an event, and cat it:

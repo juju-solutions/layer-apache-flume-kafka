@@ -1,6 +1,8 @@
 name: apache-flume-kafka
 summary: Ingest Kafka messages with Apache Flume
-maintainer: Big Data Team <bigdata@lists.ubuntu.com>
+maintainer: Juju Big Data <bigdata@lists.ubuntu.com>
+tags: ["apache", "big_data", "streaming"]
+series: [trusty, xenial]
 description: |
   Uses a Kafka source, memory channel, and Avro sink in Apache Flume
   to ingest messages published to a Kafka topic.

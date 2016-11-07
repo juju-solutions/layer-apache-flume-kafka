@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import unittest
 import amulet
+import unittest
 
 
 class TestDeploy(unittest.TestCase):
@@ -11,10 +11,9 @@ class TestDeploy(unittest.TestCase):
     This charm cannot do anything useful by itself, so integration testing
     is done in the bundle.
     """
-
     def test_deploy(self):
-        self.d = amulet.Deployment(series='trusty')
-        self.d.add('flume-kafka', 'apache-flume-kafka')
+        self.d = amulet.Deployment(series='xenial')
+        self.d.add('flume-kafka', 'cs:~bigdata-dev/xenial/apache-flume-kafka')
         self.d.setup(timeout=900)
         self.d.sentry.wait(timeout=1800)
         self.unit = self.d.sentry['flume-kafka'][0]

@@ -13,11 +13,11 @@ def report_status():
     sink_joined = is_state('flume-sink.ready')
     sink_ready = is_state('flume-sink.joined')
     if not kafka_joined and not sink_joined:
-        hookenv.status_set('blocked', 'Waiting for connection to Kafka and Flume sink')
+        hookenv.status_set('blocked', 'Waiting for relation to Kafka and Flume sink')
     elif not kafka_joined:
-        hookenv.status_set('blocked', 'Waiting for connection to Kafka')
+        hookenv.status_set('blocked', 'Waiting for relation to Kafka')
     elif not sink_joined:
-        hookenv.status_set('blocked', 'Waiting for connection to Flume sink')
+        hookenv.status_set('blocked', 'Waiting for relation to Flume sink')
     elif not kafka_ready and not sink_ready:
         hookenv.status_set('waiting', 'Waiting for Kafka and Flume sink')
     elif not kafka_ready:

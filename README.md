@@ -16,17 +16,12 @@ KafkaSource jar packaged with Flume. Learn more about the
 
 # Deploying
 
-A working Juju installation is assumed to be present. If Juju is not yet set
-up, please follow the [getting-started][] instructions prior to deploying this
-charm.
+This charm requires Juju 2.0 or greater. If Juju is not yet set up, please
+follow the [getting-started][] instructions prior to deploying this charm.
 
 This charm is intended to be deployed via the [hadoop-kafka][] bundle:
 
     juju deploy hadoop-kafka
-
-> **Note**: The above assumes Juju 2.0 or greater. If using an earlier version
-of Juju, use [juju-quickstart][] with the following syntax: `juju quickstart
-hadoop-kafka`.
 
 This will deploy an Apache Bigtop Hadoop cluster with Apache Flume and Apache
 Kafka. More information about this deployment can be found in the
@@ -39,7 +34,6 @@ mirror options. See [Configuring Models][] for more information.
 
 [getting-started]: https://jujucharms.com/docs/stable/getting-started
 [hadoop-kafka]: https://jujucharms.com/hadoop-kafka
-[juju-quickstart]: https://launchpad.net/juju-quickstart
 [Configuring Models]: https://jujucharms.com/docs/stable/models-config
 
 
@@ -50,9 +44,6 @@ an existing Kafka topic as follows:
 
     juju config flume-kafka kafka_topic='<topic_name>'
 
-> **Note**: The above assumes Juju 2.0 or greater. If using an earlier version
-of Juju, the syntax is `juju set flume-kafka kafka_topic='<topic_name>`.
-
 If you don't have a Kafka topic, you may create one (and configure this charm
 to use it) with:
 
@@ -60,12 +51,6 @@ to use it) with:
       partitions=1 replication=1
     juju show-action-output <id>  # <-- id from above command
     juju config flume-kafka kafka_topic='<topic_name>'
-
-> **Note**: The above assumes Juju 2.0 or greater. If using an earlier version
-of Juju, the syntax is:
-`juju action do kafka/0 create-topic <action_args>;`
-`juju action fetch <id>;`
-`juju set flume-kafka kafka_topic=<topic_name>`.
 
 Once the Flume agents start, messages will start flowing into
 HDFS in year-month-day directories here: `/user/flume/flume-kafka/%y-%m-%d`.
@@ -78,9 +63,6 @@ A Kafka topic is required for this test. Topic creation is covered in the
 action:
 
     juju run-action kafka/0 write-topic topic=<topic_name> data="This is a test"
-
-> **Note**: The above assumes Juju 2.0 or greater. If using an earlier version
-of Juju, the syntax is `juju action do kafka/0 write-topic <action-args>`.
 
 To verify these messages are being stored into HDFS, SSH to the `flume-hdfs`
 unit, locate an event, and cat it:
@@ -96,7 +78,7 @@ unit, locate an event, and cat it:
 - <bigdata@lists.ubuntu.com>
 
 
-# Help
+# Resources
 
 - [Apache Flume home page](http://flume.apache.org/)
 - [Apache Flume bug tracker](https://issues.apache.org/jira/browse/flume)
